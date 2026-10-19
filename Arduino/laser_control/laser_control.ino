@@ -36,7 +36,7 @@
 #include <SPI.h>
 //
 // This blank sketch serves as the project file.
-// The main C++ code is in MAX11131Main.cpp
+// The main C++ code is in Hello_MAX5715.cpp
 //
 // End of file.
 //

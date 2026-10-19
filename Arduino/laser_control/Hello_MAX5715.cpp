@@ -160,6 +160,12 @@ void cont(int command) {
   g_MAX5715_device.CODEallLOADall(0x000);
 }
 
+void hold(int command) {
+  stimAmp = command;
+  Serial.println("Laser On (hold), send <o> to switch off");
+  g_MAX5715_device.CODEallLOADall(stimAmp);
+}
+
 void recvWithStartEndMarkers() {
   static boolean recvInProgress = false;
   static byte ndx = 0;
@@ -202,7 +208,7 @@ void parseData() {      // split the data into its parts
   strcpy(stimulationType, strtokIndx); // copy it to stimtype
 
   strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
-  stimAmp = atoi(strtokIndx);     // convert this part to an integer
+  stimAmp = strtokIndx ? atoi(strtokIndx) : 0;     // convert this part to an integer, 0 if missing
 }
 
 void setup() {
@@ -233,6 +239,13 @@ void loop() {
     }
     else if (type == 't') {
       tapered(stimAmp);
+    }
+    else if (type == 'h') {
+      hold(stimAmp);
+    }
+    else if (type == 'o') {
+      g_MAX5715_device.CODEallLOADall(0x000);
+      Serial.println("Laser Off");
     }
     newData = false;
   }
